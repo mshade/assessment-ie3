@@ -115,4 +115,4 @@ jobs:
         run: |
           kubectl get po -A
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
-          envsubst < k8s/* | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
+          cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
