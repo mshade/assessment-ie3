@@ -89,7 +89,7 @@ jobs:
       TF_WORKSPACE: "taskly"
       TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
       CONFIG_DIRECTORY: "./deploy/tf"
-      KUBECONFIG: "${{ GITHUB_WORKSPACE }}/taskly-kubeconfig.yaml"
+      KUBECONFIG: "${{ env.GITHUB_WORKSPACE }}/taskly-kubeconfig.yaml"
 
     steps:
       - name: Checkout Repository
