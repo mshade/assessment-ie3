@@ -113,6 +113,12 @@ jobs:
       - name: Deploy Taskly to k8s
         working-directory: deploy
         run: |
+          echo $KUBECONFIG
+          ls -l $KUBECONFIG
           kubectl get po -A
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
           cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
+
+      - name: Summary
+        run: |
+          echo "### :rocket: Your deployment is available at: http://${{ env.NAMESPACE }}.taskly.mshade.org/"
