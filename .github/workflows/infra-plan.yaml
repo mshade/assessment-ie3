@@ -9,7 +9,7 @@ env:
   TF_CLOUD_ORGANIZATION: "mshade"
   TF_WORKSPACE: "taskly"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_VAR_linode_token: "${{ secrets.TF_VAR_linode_token }}"
+  TF_VAR_linode_token: ${{ secrets.TF_VAR_linode_token }}
   CONFIG_DIRECTORY: "./deploy/tf"
 
 jobs:
