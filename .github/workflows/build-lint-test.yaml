@@ -89,7 +89,7 @@ jobs:
       TF_WORKSPACE: "taskly"
       TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
       CONFIG_DIRECTORY: "./deploy/tf"
-      KUBECONFIG: "/tmp/taskly-kubeconfig.yaml"
+      KUBECONFIG: "./taskly-kubeconfig.yaml"
 
     steps:
       - name: Checkout Repository
@@ -103,8 +103,8 @@ jobs:
       - name: Get Kubeconfig from TF state
         working-directory: deploy/tf
         run: |
-          env
           terraform init
+          terraform output taskly_kubeconfig 
           terraform output taskly_kubeconfig | base64 -d > ${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
