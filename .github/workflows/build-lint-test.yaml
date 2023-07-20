@@ -105,7 +105,7 @@ jobs:
         working-directory: deploy/tf
         run: |
           terraform init
-          terraform output --raw taskly_kubeconfig | base64 -d > ${{ env.GITHUB_WORKSPACE}}/${{ env.KUBECONFIG }}
+          terraform output --raw taskly_kubeconfig | base64 -d > ${GITHUB_WORKSPACE}/${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
@@ -113,7 +113,7 @@ jobs:
       - name: Deploy Taskly to k8s
         working-directory: deploy
         run: |
-          export KUBECONFIG=${{ env.GITHUB_WORKSPACE }}/${{ env.KUBECONFIG }}
+          export KUBECONFIG=${GITHUB_WORKSPACE}/${{ env.KUBECONFIG }}
           ls -l $KUBECONFIG
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
           cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
