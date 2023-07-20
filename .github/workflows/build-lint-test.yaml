@@ -39,7 +39,7 @@ jobs:
           docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component}}-test npm run lint
 
       - name: Tests
-        if: ${{ matrix.component == "backend" }}
+        if: ${{ matrix.component == 'backend' }}
         run: |
           docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component}}-test npm run test
 
