@@ -5,7 +5,7 @@ USER node
 
 WORKDIR /app
 # Install prod deps first for cacheability
-COPY --chown=node package*.json .
+COPY --chown=node package*.json ./
 RUN npm ci
 
 
