@@ -8,6 +8,11 @@ WORKDIR /app
 COPY --chown=node package*.json .
 RUN npm ci
 
+# Install dev dependencies separately for linting/testing.
+FROM deps as test
+RUN npm install
+VOLUME /app/node_modules
+
 
 FROM deps as build
 # Add full codebase and build

@@ -1,0 +1,73 @@
+name: Lint, Test, Build Taskly
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: mshade/taskly
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        component: [frontend, backend]
+
+    outputs:
+      releaseTag: ${{ steps.meta.outputs.version }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Deps
+        run: |
+          docker build ${{ matrix.component }} --target test -t ${{ matrix.component}}-test
+
+      - name: Type Check
+        run: |
+          docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component }}-test npm run type-check
+
+      - name: Linting
+        run: |
+          docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component}}-test npm run lint
+
+      - name: Tests
+        if: ${{ matrix.component }} = "backend"
+        run: |
+          docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component}}-test npm run test
+
+      - name: Log into GHCR
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          tags: |
+            # Release tag as container tag
+            type=ref,event=tag
+            # latest for main builds
+            type=raw,value=latest,enable={{is_default_branch}}
+            # always tag with sha for reference
+            type=sha,priority=500
+            # tag PRs
+            type=ref,event=pr
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.component }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ matrix.component }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
