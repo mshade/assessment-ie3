@@ -89,7 +89,7 @@ jobs:
       TF_WORKSPACE: "taskly"
       TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
       CONFIG_DIRECTORY: "./deploy/tf"
-      KUBECONFIG: "${{ env.GITHUB_WORKSPACE }}/taskly-kubeconfig.yaml"
+      KUBECONFIG: "taskly-kubeconfig.yaml"
 
     steps:
       - name: Checkout Repository
@@ -105,7 +105,7 @@ jobs:
         working-directory: deploy/tf
         run: |
           terraform init
-          terraform output --raw taskly_kubeconfig | base64 -d > ${{ env.KUBECONFIG }}
+          terraform output --raw taskly_kubeconfig | base64 -d > ${{ env.GITHUB_WORKSPACE}}/${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
@@ -113,6 +113,7 @@ jobs:
       - name: Deploy Taskly to k8s
         working-directory: deploy
         run: |
+          export KUBECONFIG=${{ env.GITHUB_WORKSPACE }}/${{ env.KUBECONFIG }}
           ls -l $KUBECONFIG
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
           cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
