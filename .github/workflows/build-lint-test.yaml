@@ -100,8 +100,9 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Get Kubeconfig from TF state
+        working-directory: deploy/tf
         run: |
-          terraform output taskly_kubeconfig | base64 -d > ${{ env.KUBECONFIG }}
+          terraform output taskly_kubeconfig #| base64 -d > ${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
