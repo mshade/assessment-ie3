@@ -50,7 +50,7 @@ jobs:
           docker run -i --rm -v $PWD/${{ matrix.component }}:/app ${{ matrix.component}}-test npm run test
 
       - name: Log into GHCR
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -102,6 +102,8 @@ jobs:
       - name: Get Kubeconfig from TF state
         working-directory: deploy/tf
         run: |
+          env
+          terraform init
           terraform output taskly_kubeconfig #| base64 -d > ${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
