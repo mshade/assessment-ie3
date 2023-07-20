@@ -99,12 +99,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wraper: false
 
       - name: Get Kubeconfig from TF state
         working-directory: deploy/tf
         run: |
           terraform init
-          terraform output --raw taskly_kubeconfig 
           terraform output --raw taskly_kubeconfig | base64 -d > ${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
