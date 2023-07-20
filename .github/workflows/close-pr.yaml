@@ -1,4 +1,4 @@
-name: Cleanup Ephemeral Environment
+name: Cleanup Ephemeral Environments
 
 # only trigger on pull request closed events
 on:
@@ -30,12 +30,11 @@ jobs:
         working-directory: deploy/tf
         run: |
           terraform init
-          terraform output taskly_kubeconfig | base64 -d > ${{ env.KUBECONFIG }}
+          terraform output taskly_kubeconfig | base64 -d > ../../${{ env.KUBECONFIG }}
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
 
       - name: Deploy Taskly to k8s
-        working-directory: deploy
         run: |
           kubectl delete ns ${{ env.NAMESPACE }}
