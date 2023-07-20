@@ -118,6 +118,10 @@ jobs:
           export KUBECONFIG=${GITHUB_WORKSPACE}/${{ env.KUBECONFIG }}
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
           cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f -
+        
+      - name: Cleanup
+        if: always()
+        run: rm -f ${GITHUB_WORKSPACE}/${{ env.KUBECONFIG }}
 
       - name: Summary
         run: |
