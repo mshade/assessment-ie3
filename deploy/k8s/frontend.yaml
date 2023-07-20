@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: ghcr.io/mshade/taskly-frontend:latest
+        image: ghcr.io/mshade/taskly-frontend:${RELEASE_TAG}
         resources: {}
         ports:
           - containerPort: 8080

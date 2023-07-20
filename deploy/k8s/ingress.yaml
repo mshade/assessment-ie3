@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: ${RELEASE_TAG}.taskly.mshade.org
+  - host: ${NAMESPACE}.taskly.mshade.org
     http:
       paths:
       - path: /
