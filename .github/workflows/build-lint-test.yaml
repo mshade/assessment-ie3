@@ -99,7 +99,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          terraform_wraper: false
+          terraform_wrapper: false
 
       - name: Get Kubeconfig from TF state
         working-directory: deploy/tf
