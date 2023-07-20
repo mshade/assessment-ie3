@@ -34,7 +34,9 @@ jobs:
 
       - name: Install Deps
         run: |
-          docker build ${{ matrix.component }} --target test -t ${{ matrix.component}}-test
+          CACHED=""
+          docker pull ${{ env.REGISTRY }}/${ {env.IMAGE_NAME }}-${{ matrix.component }}:latest && CACHED="--cache-from ${{ env.REGISTRY }}/${ {env.IMAGE_NAME }}-${{ matrix.component }}:latest"
+          docker build ${CACHED} ${{ matrix.component }} --target test -t ${{ matrix.component}}-test
 
       - name: Type Check
         run: |
@@ -114,9 +116,8 @@ jobs:
         working-directory: deploy
         run: |
           export KUBECONFIG=${GITHUB_WORKSPACE}/${{ env.KUBECONFIG }}
-          ls -l $KUBECONFIG
           kubectl get ns "${{ env.NAMESPACE }}" || kubectl create ns "${{ env.NAMESPACE }}"
-          cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f - --dry-run=client -o yaml
+          cat k8s/* | envsubst | kubectl -n "${{ env.NAMESPACE }}" apply -f -
 
       - name: Summary
         run: |
