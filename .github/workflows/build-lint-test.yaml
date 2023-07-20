@@ -3,7 +3,13 @@ name: Lint, Test, Build Taskly
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - "deploy/tf/**"
+      - ".github/workflows/infra-**"
   pull_request:
+    paths-ignore:
+      - "deploy/tf/**"
+      - ".github/workflows/infra-**"
 
 env:
   REGISTRY: ghcr.io
