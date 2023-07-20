@@ -35,7 +35,7 @@ jobs:
       - name: Install Deps
         run: |
           CACHED=""
-          docker pull ${{ env.REGISTRY }}/${ {env.IMAGE_NAME }}-${{ matrix.component }}:latest && CACHED="--cache-from ${{ env.REGISTRY }}/${ {env.IMAGE_NAME }}-${{ matrix.component }}:latest"
+          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.component }}:latest && CACHED="--cache-from ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ matrix.component }}:latest"
           docker build ${CACHED} ${{ matrix.component }} --target test -t ${{ matrix.component}}-test
 
       - name: Type Check
