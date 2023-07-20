@@ -53,6 +53,7 @@ provider "helm" {
   }
 }
 
+# Ingress controller for multi-hosting and load balancer endpoint
 resource "helm_release" "ingress" {
   chart = "ingress-nginx"
   name = "ingress-nginx"
