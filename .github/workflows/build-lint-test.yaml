@@ -125,4 +125,4 @@ jobs:
 
       - name: Summary
         run: |
-          echo "### :rocket: Your deployment is available at: http://${{ env.NAMESPACE }}.taskly.mshade.org/"
+          echo "### :rocket: Your deployment is available at: [${{ env.NAMESPACE }}.taskly.mshade.org/](http://${{ env.NAMESPACE }}.taskly.mshade.org/)" >> $GITHUB_STEP_SUMMARY
