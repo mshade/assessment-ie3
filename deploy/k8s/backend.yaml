@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: ghcr.io/mshade/taskly-backend:latest
+        resources: {}
+        ports:
+          - containerPort: 3030
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend
+spec:
+  selector:
+    app:  backend
+  type:  ClusterIP
+  ports:
+  - name:  web
+    port:  80
+    targetPort:  3030
+---
