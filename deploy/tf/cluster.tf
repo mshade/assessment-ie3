@@ -53,12 +53,12 @@ provider "helm" {
   }
 }
 
-# Ingress controller for multi-hosting and load balancer endpoint
-resource "helm_release" "ingress" {
-  chart = "ingress-nginx"
-  name = "ingress-nginx"
-  namespace = "ingress-nginx"
-  create_namespace = true
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  version = "4.7.1"
-}
+# # Ingress controller for multi-hosting and load balancer endpoint
+# resource "helm_release" "ingress" {
+#   chart = "ingress-nginx"
+#   name = "ingress-nginx"
+#   namespace = "ingress-nginx"
+#   create_namespace = true
+#   repository = "https://kubernetes.github.io/ingress-nginx"
+#   version = "4.7.1"
+# }
